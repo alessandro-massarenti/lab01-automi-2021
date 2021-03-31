@@ -12,8 +12,7 @@ typedef std::pair<int,char> tpair;
  * Abstract class for Deterministic Finite Automata.
  */
 class AbstractDFA {
-
-private:	
+private:
 	// - final states (and sink states)
 	vector<int> final_states;
 
@@ -23,7 +22,7 @@ private:
 
 	// - current state
 	int current_state;
-    
+
 public:
 	/**
 	 * Constructor for Abstract DFA.
@@ -64,6 +63,14 @@ public:
 	 * @return True, if if the word is accepted by this automaton
 	 */
 	bool run(const string &inputWord);
+
+//Metodi ausiliari e altro
+protected:
+
+	//aggiunge o modifica la transizione da  (FROM, INPUT) a TO
+	void manageTransition(const int& from, const char& input, int to);
+	void addFinalState(const int& id);
+    
 };
 
 /**
@@ -88,6 +95,14 @@ public:
  * DFA recognizing comments.
  */
 class CommentDFA : public AbstractDFA {
+
+	inline static const char ANY = 'c';
+    inline static const vector<char> ALPHABET = {
+            '/',
+            '\n',
+            '*',
+            CommentDFA::ANY // rappresenta qualunque altro carattere
+    };
 
 public:
 	/**

@@ -1,5 +1,5 @@
 CXX=g++
-CXXFLAGS=
+CXXFLAGS= -g -std=c++17
 LDFLAGS=
 DEPS=automata.h
 OBJS=main.o automata.o

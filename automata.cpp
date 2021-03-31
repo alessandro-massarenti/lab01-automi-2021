@@ -68,6 +68,11 @@ bool AbstractDFA::run(const string &inputWord) {
     return isAccepting();
 }
 
+//aggiunge o modifica la transizione da  (FROM, INPUT) a TO
+void AbstractDFA::manageTransition(const int& from, const char& input, int to){
+    states[tpair(from, input)] = to;
+}
+void AbstractDFA::addFinalState(const int& id){ final_states.push_back(id); }
 
 /**
  * Construct a new DFA that recognizes exactly the given word. Given a word
@@ -79,25 +84,40 @@ bool AbstractDFA::run(const string &inputWord) {
  *            A String that the automaton should recognize
  */
 WordDFA::WordDFA(const string &word) : AbstractDFA(0) {
-    for(auto& letter : word){
 
-        
+    int count = 0;
+    for(const char& letter : word){
+        manageTransition(count,letter,count+1);
+        count++;
     }
-    
-    // TODO: fill in correct number of states
-    
-    // TODO: build DFA recognizing the given word
+    addFinalState(word.length());    
 }
 
 /**
  * Construct a new DFA that recognizes comments within source code. There
- * are three kinds of comments: single line comment that starts with // and ends
- * with a newline, multiline comments that starts with (* and ends with *), and
- * multiline comments that starts with { and ends with }
+ * are three kinds of comments: 
+ * single line comment that starts with // and ends with a newline,
+ * multiline comments that starts with (* and ends with *),
+ * and multiline comments that starts with { and ends with }
  */
 CommentDFA::CommentDFA() : AbstractDFA(0) {
-    // TODO: fill in correct number of states
-    // TODO: build DFA recognizing comments
+
+    manageTransition(0,'/',1);
+    manageTransition(1,'/',2);
+    manageTransition(2,ANY,2);
+    manageTransition(2,'\n',3);
+
+    manageTransition(0,'{',4);
+    manageTransition(4,ANY,4);
+    manageTransition(4,'}',3);
+
+    manageTransition(0,'(',5);
+    manageTransition(5,'*',6);
+    manageTransition(6,ANY,6);
+    manageTransition(6,'*',7);
+    manageTransition(7,')',3);
+
+    addFinalState(3);
 }
 
 /**
@@ -108,7 +128,13 @@ CommentDFA::CommentDFA() : AbstractDFA(0) {
  *            The current input.
  */
 void CommentDFA::doStep(char letter) {
-    // TODO: implement accordingly
+    // chiamo il doStep di default
+    AbstractDFA::doStep(
+            // se trovo il carattere nel mio alfabeto, uso quel carattere, 
+            // altrimenti uso ANY per rappresentarlo
+            std::count(CommentDFA::ALPHABET.begin(), CommentDFA::ALPHABET.end(), letter) ?
+                letter : CommentDFA::ANY
+    );
 }	
 
 
