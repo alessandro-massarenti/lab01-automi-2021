@@ -10,11 +10,16 @@ using namespace std;
  *            Number of states in the DFA.
  */
 AbstractDFA::AbstractDFA(int noStates):current_state(0) {}
+//Ho inizializzato lo stato iniziale allo stato 0
 
 /**
  * Reset the automaton to the initial state.
  */
 void AbstractDFA::reset() {
+
+    /*
+    Imposto lo stato corrente a 0
+    */
     current_state = 0;
 }
 
@@ -41,8 +46,11 @@ void AbstractDFA::doStep(char letter) {
  * @return True, if the automaton is currently in the accepting state.
  */
 bool AbstractDFA::isAccepting() {
-    // TODO: return if the current state is accepting
-    return false;
+    /* 
+    In un DFA l' automa si trova solo se si trova in uno stato finale,
+    quindi controllo se mi trovo in uno stato finale
+    */
+   return std::count(final_states.begin(),final_states.end(),current_state);
 }
 
 /**
@@ -71,6 +79,11 @@ bool AbstractDFA::run(const string &inputWord) {
  *            A String that the automaton should recognize
  */
 WordDFA::WordDFA(const string &word) : AbstractDFA(0) {
+    for(auto& letter : word){
+
+        
+    }
+    
     // TODO: fill in correct number of states
     
     // TODO: build DFA recognizing the given word
