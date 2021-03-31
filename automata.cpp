@@ -9,15 +9,13 @@ using namespace std;
  * @param noStates
  *            Number of states in the DFA.
  */
-AbstractDFA::AbstractDFA(int noStates) {
-	// TODO: initialize data structures
-}
+AbstractDFA::AbstractDFA(int noStates):current_state(0) {}
 
 /**
  * Reset the automaton to the initial state.
  */
 void AbstractDFA::reset() {
-    // TODO: reset automaton to initial state
+    current_state = 0;
 }
 
 /**
@@ -30,8 +28,11 @@ void AbstractDFA::reset() {
  *            The current input.
  */
 void AbstractDFA::doStep(char letter) {
-    // TODO: do step by going to the next state according to the current
-    // state and the read letter.
+    /*
+    Cerco nelle possibili transizioni dello stato corrente
+    la transizione per il prossimo stato   
+    */
+    current_state = states[tpair(current_state,letter)];
 }
 
 /**

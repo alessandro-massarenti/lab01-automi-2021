@@ -12,11 +12,17 @@ typedef std::pair<int,char> tpair;
  * Abstract class for Deterministic Finite Automata.
  */
 class AbstractDFA {
-	// TODO: use data structure for representing
-	// - states
+
+private:	
 	// - final states (and sink states)
+	vector<int> final_states;
+
+	// - states
 	// - transitions of the form (state, input) -> state
+	map<tpair, int> states; 
+
 	// - current state
+	int current_state;
     
 public:
 	/**
@@ -25,7 +31,7 @@ public:
 	 * @param noStates
 	 *            Number of states in the DFA.
 	 */
-	AbstractDFA(int noStates);
+	AbstractDFA(int noStates); 
 
 	/**
 	 * Reset the automaton to the initial state.
