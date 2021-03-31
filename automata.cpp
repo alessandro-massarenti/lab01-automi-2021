@@ -115,6 +115,7 @@ CommentDFA::CommentDFA() : AbstractDFA(0) {
     manageTransition(5,'*',6);
     manageTransition(6,ANY,6);
     manageTransition(6,'*',7);
+    manageTransition(7,ANY,6);
     manageTransition(7,')',3);
 
     addFinalState(3);
@@ -128,12 +129,14 @@ CommentDFA::CommentDFA() : AbstractDFA(0) {
  *            The current input.
  */
 void CommentDFA::doStep(char letter) {
+
+
     // chiamo il doStep di default
     AbstractDFA::doStep(
             // se trovo il carattere nel mio alfabeto, uso quel carattere, 
             // altrimenti uso ANY per rappresentarlo
-            std::count(CommentDFA::ALPHABET.begin(), CommentDFA::ALPHABET.end(), letter) ?
-                letter : CommentDFA::ANY
+            
+            std::count(CommentDFA::ALPHABET.begin(), CommentDFA::ALPHABET.end(), letter) ? letter : CommentDFA::ANY
     );
 }	
 

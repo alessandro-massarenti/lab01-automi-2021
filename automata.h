@@ -101,6 +101,10 @@ class CommentDFA : public AbstractDFA {
             '/',
             '\n',
             '*',
+			'{',
+			'}',
+			'(',
+			')',
             CommentDFA::ANY // rappresenta qualunque altro carattere
     };
 

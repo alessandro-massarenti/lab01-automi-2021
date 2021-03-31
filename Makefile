@@ -15,8 +15,10 @@ main: $(OBJS) $(DEPS)
 clean:
 	rm -f $(OBJS) main
 test:
+	
 	./main tests/test1.txt
 	./main tests/test2.txt
 	./main tests/test3.txt
 	./main tests/test4.txt
 	./main tests/test5.txt
+
