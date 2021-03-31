@@ -139,19 +139,23 @@ WordDFA::WordDFA(const string &word) : AbstractDFA(0) {
 CommentDFA::CommentDFA() : AbstractDFA(0) {
 
     /*
-    
-    |\
-    | \
-    |  (0)-- / -->(1)
-    | / |\
-    |/  | \ 
-        |  \ ____>(4)
-        |
-        |
-        |
-        | 
-    
-    
+                                      "ANY"
+    |\                                 / \
+    | \                                \ v
+    |  (0)----- "/" --> (1) -- "/" --> (2) -- "\n" -----------
+    | / |\                                                   |
+    |/  | \            "ANY"                                 |
+        |  \            / \                                  |
+        |   \           \ v                                  v
+        |    -- "{" --> (4) ------------------ "}" ------> ((3))           
+        |                                                    ^
+        |                             "ANY"                  |
+        |                              / \                   |
+        |                              \ v                   |
+        ------- "(" --> (5) -- "*" --> (6) -- "*" --> (7) ----
+                                        ^               |
+                                        |               |
+                                         ---- "ANY" ----
     */
 
     //Qui l'automa è fissato e costruito appositamente per riconoscere i 3 tipi di commenti
