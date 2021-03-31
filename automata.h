@@ -21,10 +21,10 @@ private:
 	map<tpair, int> states; 
 
 	// - current state
-	int current_state;
+	int current_state = 0;
 
 	// - trap state
-	int trap_state;
+	int trap_state = -1;
 
 public:
 	/**

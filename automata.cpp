@@ -47,7 +47,7 @@ void AbstractDFA::doStep(char letter) {
  */
 bool AbstractDFA::isAccepting() {
     /* 
-    In un DFA l' automa si trova solo se si trova in uno stato finale,
+    In un DFA l' automa accetta solo se si trova in uno stato finale,
     quindi controllo se mi trovo in uno stato finale
     */
    return std::count(final_states.begin(),final_states.end(),current_state);
@@ -67,6 +67,8 @@ bool AbstractDFA::run(const string &inputWord) {
     }
     return isAccepting();
 }
+
+//funzioni ausiliarie
 
 //aggiunge o modifica la transizione da  (FROM, INPUT) a TO
 void AbstractDFA::manageTransition(const int& from, const char& input, int to){
@@ -91,19 +93,40 @@ int AbstractDFA::getTrap(){return trap_state;}
  */
 WordDFA::WordDFA(const string &word) : AbstractDFA(0) {
 
+
+    //Utilizzo lo stato trappola per mantenere la correttezza del dfa.
+    //In questo caso lo setto con il valore id di uno stato in più rispetto
+    //al totale di stati che sarà quanto la parola più lo stato trappola
     setTrap(word.length()+1);
 
+
+    //Genero tutti gli stati del DFA e li faccio puntare di default 
+    //con tutte le lettere dell'alfabeto allo stato trappola
     for(auto& lt : word){
         for(unsigned int i = 0; i<= word.length()+1; i ++){
             manageTransition(i,lt,getTrap());
         }
     }
 
+    //Modifico lo stato corretto per tutte le transizioni che ne hanno bisogno
     for(unsigned int i = 0; i< word.length();i++){
         manageTransition(i,word[i],i+1);
     }
 
+    //Aggiungo l'id dello stato finale alla lista degli stati finali così che l'automa possa riconoscerlo.
+    //L'id dello stato finale è la dimensione della parola
     addFinalState(word.length());    
+
+    //Rappresentazione dell'automa
+    /*
+
+        |\
+        | \       
+        |  (0) -- r[0] --> (1) -- e[1] --> (2)  -- p[2]--> (3) -- e[3] --> (n) -- ... --> (n-1) -- n-esima lettera --> ((n))
+        | /
+        |/
+    
+    */
 }
 
 /**
@@ -115,15 +138,40 @@ WordDFA::WordDFA(const string &word) : AbstractDFA(0) {
  */
 CommentDFA::CommentDFA() : AbstractDFA(0) {
 
+    /*
+    
+    |\
+    | \
+    |  (0)-- / -->(1)
+    | / |\
+    |/  | \ 
+        |  \ ____>(4)
+        |
+        |
+        |
+        | 
+    
+    
+    */
+
+    //Qui l'automa è fissato e costruito appositamente per riconoscere i 3 tipi di commenti
+
+
+    //Setto lo stato trappola allo stato 8, ovvero uno in più dello stato più grande dell'automa
     setTrap(8);
+
+    //Setto lo stato finale allo stato 3
     addFinalState(3);
 
+    //Genero tutti gli stati del DFA e li faccio puntare di default 
+    //con tutte le lettere dell'alfabeto allo stato trappola
     for(auto& st : {0,1,2,3,4,5,6,7, AbstractDFA::getTrap()}){
         for(auto& lt : ALPHABET){
             manageTransition(st,lt,getTrap());
         }
     }
 
+    //Setto tutte le varie transizioni dell'automa
     manageTransition(0,'/',1);
     manageTransition(1,'/',2);
     manageTransition(2,ANY,2);
@@ -154,10 +202,11 @@ void CommentDFA::doStep(char letter) {
 
     // chiamo il doStep di default
     AbstractDFA::doStep(
-            // se trovo il carattere nel mio alfabeto, uso quel carattere, 
-            // altrimenti uso ANY per rappresentarlo
-            
-            std::count(CommentDFA::ALPHABET.begin(), CommentDFA::ALPHABET.end(), letter) ? letter : CommentDFA::ANY
+        // E gli passo:
+        // - Se trovo il carattere nel mio alfabeto, uso quel carattere, 
+        // - altrimenti uso ANY per rappresentarlo
+        
+        std::count(CommentDFA::ALPHABET.begin(), CommentDFA::ALPHABET.end(), letter) ? letter : CommentDFA::ANY
     );
 }	
 
