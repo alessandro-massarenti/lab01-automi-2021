@@ -117,7 +117,7 @@ WordDFA::WordDFA(const string &word) : AbstractDFA(0) {
     //L'id dello stato finale è la dimensione della parola
     addFinalState(word.length());    
 
-    //Rappresentazione dell'automa
+    //Rappresentazione del DFA che riconosce la parola
     /*
 
         |\
@@ -138,7 +138,10 @@ WordDFA::WordDFA(const string &word) : AbstractDFA(0) {
  */
 CommentDFA::CommentDFA() : AbstractDFA(0) {
 
+    
+    //Rappresentazione del DFA che riconosce i commenti
     /*
+    
                                       "ANY"
     |\                                 / \
     | \                                \ v
@@ -156,6 +159,7 @@ CommentDFA::CommentDFA() : AbstractDFA(0) {
                                         ^               |
                                         |               |
                                          ---- "ANY" ----
+    
     */
 
     //Qui l'automa è fissato e costruito appositamente per riconoscere i 3 tipi di commenti
@@ -176,15 +180,18 @@ CommentDFA::CommentDFA() : AbstractDFA(0) {
     }
 
     //Setto tutte le varie transizioni dell'automa
+    //Ramo che riconosce il commento monolinea "//..."
     manageTransition(0,'/',1);
     manageTransition(1,'/',2);
     manageTransition(2,ANY,2);
     manageTransition(2,'\n',3);
-
+    
+    //Ramo che riconosce il commento multilinea "{...}"
     manageTransition(0,'{',4);
     manageTransition(4,ANY,4);
     manageTransition(4,'}',3);
 
+    //Ramo che riconosce il commento multilinea "(*...*)"
     manageTransition(0,'(',5);
     manageTransition(5,'*',6);
     manageTransition(6,ANY,6);
