@@ -74,6 +74,12 @@ void AbstractDFA::manageTransition(const int& from, const char& input, int to){
 }
 void AbstractDFA::addFinalState(const int& id){ final_states.push_back(id); }
 
+void AbstractDFA::setTrap(const int & id){
+    trap_state = id;
+}
+
+int AbstractDFA::getTrap(){return trap_state;}
+
 /**
  * Construct a new DFA that recognizes exactly the given word. Given a word
  * "foo" the constructed automaton looks like: -> () -f-> () -o-> () -o-> []
@@ -85,11 +91,18 @@ void AbstractDFA::addFinalState(const int& id){ final_states.push_back(id); }
  */
 WordDFA::WordDFA(const string &word) : AbstractDFA(0) {
 
-    int count = 0;
-    for(const char& letter : word){
-        manageTransition(count,letter,count+1);
-        count++;
+    setTrap(word.length()+1);
+
+    for(auto& lt : word){
+        for(unsigned int i = 0; i<= word.length()+1; i ++){
+            manageTransition(i,lt,getTrap());
+        }
     }
+
+    for(unsigned int i = 0; i< word.length();i++){
+        manageTransition(i,word[i],i+1);
+    }
+
     addFinalState(word.length());    
 }
 
@@ -101,6 +114,15 @@ WordDFA::WordDFA(const string &word) : AbstractDFA(0) {
  * and multiline comments that starts with { and ends with }
  */
 CommentDFA::CommentDFA() : AbstractDFA(0) {
+
+    setTrap(8);
+    addFinalState(3);
+
+    for(auto& st : {0,1,2,3,4,5,6,7, AbstractDFA::getTrap()}){
+        for(auto& lt : ALPHABET){
+            manageTransition(st,lt,getTrap());
+        }
+    }
 
     manageTransition(0,'/',1);
     manageTransition(1,'/',2);
@@ -118,7 +140,6 @@ CommentDFA::CommentDFA() : AbstractDFA(0) {
     manageTransition(7,ANY,6);
     manageTransition(7,')',3);
 
-    addFinalState(3);
 }
 
 /**

@@ -23,6 +23,9 @@ private:
 	// - current state
 	int current_state;
 
+	// - trap state
+	int trap_state;
+
 public:
 	/**
 	 * Constructor for Abstract DFA.
@@ -70,7 +73,9 @@ protected:
 	//aggiunge o modifica la transizione da  (FROM, INPUT) a TO
 	void manageTransition(const int& from, const char& input, int to);
 	void addFinalState(const int& id);
-    
+	void setTrap(const int& id);
+	int getTrap();
+
 };
 
 /**
