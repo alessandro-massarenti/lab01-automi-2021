@@ -9,7 +9,7 @@ using namespace std;
  * @param noStates
  *            Number of states in the DFA.
  */
-AbstractDFA::AbstractDFA(int noStates):current_state(0) {}
+AbstractDFA::AbstractDFA(int noStates):current_state(0), trap_state(-1) {}
 //Ho inizializzato lo stato iniziale allo stato 0
 
 /**
@@ -137,6 +137,9 @@ WordDFA::WordDFA(const string &word) : AbstractDFA(0) {
  * and multiline comments that starts with { and ends with }
  */
 CommentDFA::CommentDFA() : AbstractDFA(0) {
+
+    
+
 
     
     //Rappresentazione del DFA che riconosce i commenti
