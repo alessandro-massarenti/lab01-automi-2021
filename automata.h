@@ -102,7 +102,7 @@ public:
  */
 class CommentDFA : public AbstractDFA {
 
-	inline static const char ANY = 'c';
+	static const char ANY = 'c';
     inline static const vector<char> ALPHABET = {
             '/',
             '\n',
